@@ -1,4 +1,4 @@
-package project.logic.entity.rol;
+package project.logic.entity.role;
 
 public enum RoleEnum {
     USER,

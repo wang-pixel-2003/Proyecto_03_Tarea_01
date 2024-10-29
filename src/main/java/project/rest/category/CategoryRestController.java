@@ -1,7 +1,7 @@
 package project.rest.category;
 
-import project.logic.entity.categoria.Categoria;
-import project.logic.entity.categoria.CategoriaRepository;
+import project.logic.entity.category.Category;
+import project.logic.entity.category.CategoryRepository;
 import project.logic.entity.http.GlobalResponseHandler;
 import project.logic.entity.http.Meta;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,11 +15,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/categorias")
+@RequestMapping("/categories")
 public class CategoryRestController {
 
     @Autowired
-    private CategoriaRepository CategoriaRepository;
+    private CategoryRepository categoryRepository;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
@@ -28,43 +28,42 @@ public class CategoryRestController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request) {
 
-        Pageable pageable = PageRequest.of(page-1, size);
-        Page<Categoria> categoriasPage = CategoriaRepository.findAll(pageable);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Category> categoriesPage = categoryRepository.findAll(pageable);
         Meta meta = new Meta(request.getMethod(), request.getRequestURL().toString());
-        meta.setTotalPages(categoriasPage.getTotalPages());
-        meta.setTotalElements(categoriasPage.getTotalElements());
-        meta.setPageNumber(categoriasPage.getNumber() + 1);
-        meta.setPageSize(categoriasPage.getSize());
+        meta.setTotalPages(categoriesPage.getTotalPages());
+        meta.setTotalElements(categoriesPage.getTotalElements());
+        meta.setPageNumber(categoriesPage.getNumber() + 1);
+        meta.setPageSize(categoriesPage.getSize());
 
-        return new GlobalResponseHandler().handleResponse("Categoria retrieved successfully",
-                categoriasPage.getContent(), HttpStatus.OK, meta);
+        return new GlobalResponseHandler().handleResponse("Category retrieved successfully",
+                categoriesPage.getContent(), HttpStatus.OK, meta);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public Categoria createCategoria(@RequestBody Categoria categoria) {
-        return CategoriaRepository.save(categoria);
+    public Category createCategory(@RequestBody Category category) {
+        return categoryRepository.save(category);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public Categoria updateCategoria(@PathVariable Long id,  @RequestBody Categoria categoria) {
-        return CategoriaRepository.findById(id)
-                .map(existingCategoria -> {
-                    existingCategoria.setNombre(categoria.getNombre());
-                    existingCategoria.setDescripcion(categoria.getDescripcion());
-                    return CategoriaRepository.save(existingCategoria);
+    public Category updateCategory(@PathVariable Long id, @RequestBody Category category) {
+        return categoryRepository.findById(id)
+                .map(existingCategory -> {
+                    existingCategory.setName(category.getName());
+                    existingCategory.setDescription(category.getDescription());
+                    return categoryRepository.save(existingCategory);
                 })
                 .orElseGet(() -> {
-                    categoria.setId(id);
-                    return CategoriaRepository.save(categoria);
+                    category.setId(id);
+                    return categoryRepository.save(category);
                 });
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public void deleteCategoria(@PathVariable Long id) {
-        CategoriaRepository.deleteById(id);
+    public void deleteCategory(@PathVariable Long id) {
+        categoryRepository.deleteById(id);
     }
-
 }

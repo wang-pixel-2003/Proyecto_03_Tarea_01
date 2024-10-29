@@ -2,9 +2,9 @@ package project.rest.auth;
 
 import project.logic.entity.auth.AuthenticationService;
 import project.logic.entity.auth.JwtService;
-import project.logic.entity.rol.Role;
-import project.logic.entity.rol.RoleEnum;
-import project.logic.entity.rol.RoleRepository;
+import project.logic.entity.role.Role;
+import project.logic.entity.role.RoleEnum;
+import project.logic.entity.role.RoleRepository;
 import project.logic.entity.user.LoginResponse;
 import project.logic.entity.user.User;
 import project.logic.entity.user.UserRepository;

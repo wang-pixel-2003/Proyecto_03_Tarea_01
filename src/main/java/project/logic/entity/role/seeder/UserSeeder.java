@@ -1,6 +1,9 @@
-package project.logic.entity.rol;
+package project.logic.entity.role.seeder;
 
 
+import project.logic.entity.role.Role;
+import project.logic.entity.role.RoleEnum;
+import project.logic.entity.role.RoleRepository;
 import project.logic.entity.user.User;
 import project.logic.entity.user.UserRepository;
 import org.springframework.context.ApplicationListener;

@@ -1,4 +1,4 @@
-package project.logic.entity.rol;
+package project.logic.entity.role;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

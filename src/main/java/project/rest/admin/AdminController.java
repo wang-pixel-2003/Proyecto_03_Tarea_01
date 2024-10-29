@@ -1,8 +1,8 @@
 package project.rest.admin;
 
-import project.logic.entity.rol.Role;
-import project.logic.entity.rol.RoleEnum;
-import project.logic.entity.rol.RoleRepository;
+import project.logic.entity.role.Role;
+import project.logic.entity.role.RoleEnum;
+import project.logic.entity.role.RoleRepository;
 import project.logic.entity.user.User;
 import project.logic.entity.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,11 @@
-package project.logic.entity.rol;
+package project.logic.entity.role.seeder;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
+import project.logic.entity.role.Role;
+import project.logic.entity.role.RoleEnum;
+import project.logic.entity.role.RoleRepository;
 
 import java.util.Arrays;
 import java.util.Map;

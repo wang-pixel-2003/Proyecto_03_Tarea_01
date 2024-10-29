@@ -5,8 +5,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ProductoRepository extends JpaRepository<Producto, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query("SELECT p FROM Producto p JOIN p.categoria c")
-    List<Producto> findByCategoriaNombre();
+    @Query("SELECT p FROM Product p JOIN p.category c")
+    List<Product> findByCategoryName();
 }

@@ -1,80 +1,79 @@
 package project.rest.product;
 
-import project.logic.entity.ProductoRequest;
-import project.logic.entity.categoria.Categoria;
-import project.logic.entity.categoria.CategoriaRepository;
-import project.logic.entity.product.Producto;
-import project.logic.entity.product.ProductoRepository;
+import project.logic.entity.product.DTO.ProductRequest;
+import project.logic.entity.category.Category;
+import project.logic.entity.category.CategoryRepository;
+import project.logic.entity.product.Product;
+import project.logic.entity.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/productos")
+@RequestMapping("/product")
 public class ProductRestController {
 
     @Autowired
-    private ProductoRepository ProductoRepository;
+    private ProductRepository productRepository;
 
     @Autowired
-    private CategoriaRepository CategoriaRepository;
+    private CategoryRepository categoryRepository;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'USER')")
-    public ResponseEntity<List<Producto>> getAllProductosConCategoria() {
-        List<Producto> productos = ProductoRepository.findByCategoriaNombre();
-        if (productos.isEmpty()) {
-            return ResponseEntity.noContent().build(); // Devuelve un 204 si no hay productos
+    public ResponseEntity<List<Product>> getAllProductsWithCategory() {
+        List<Product> products = productRepository.findByCategoryName();
+        if (products.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Returns a 204 if there are no products
         }
-        return ResponseEntity.ok(productos); // Devuelve un 200 con la lista de productos
+        return ResponseEntity.ok(products); // Returns a 200 with the list of products
     }
 
     @PostMapping
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<?> createProducto(@RequestBody ProductoRequest request) {
+    public ResponseEntity<?> createProduct(@RequestBody ProductRequest request) {
 
-        Optional<Categoria> objetoCategoria = Optional.ofNullable(CategoriaRepository.findByNombre(request.getNombreCategoria()));
-        if (objetoCategoria.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Categoria not found");
+        Optional<Category> categoryObject = Optional.ofNullable(categoryRepository.findByName(request.getCategoryName()));
+        if (categoryObject.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Category not found");
         }
-        Producto producto = new Producto();
-        producto.setNombre(request.getNombre());
-        producto.setDescripcion(request.getDescripcion());
-        producto.setCantidadStock(request.getStock());
-        producto.setPrecio(request.getPrecio());
-        producto.setCategoria(objetoCategoria.get());
+        Product product = new Product();
+        product.setName(request.getName());
+        product.setDescription(request.getDescription());
+        product.setStockQuantity(request.getStock());
+        product.setPrice(request.getPrice());
+        product.setCategory(categoryObject.get());
 
-        Producto productoSave = ProductoRepository.save(producto);
-        return ResponseEntity.ok(productoSave);
+        Product savedProduct = productRepository.save(product);
+        return ResponseEntity.ok(savedProduct);
     }
-
-
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    public Producto updateProducto(@PathVariable Long id, @RequestBody Producto producto) {
-        return ProductoRepository.findById(id)
-                .map(existingProducto -> {
-                    existingProducto.setNombre(producto.getNombre());
-                    existingProducto.setDescripcion(producto.getDescripcion());
-                    existingProducto.setPrecio(producto.getPrecio());
-                    existingProducto.setCantidadStock(producto.getCantidadStock());
-                    existingProducto.setCategoria(producto.getCategoria());
-                    return ProductoRepository.save(existingProducto);
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        return productRepository.findById(id)
+                .map(existingProduct -> {
+                    existingProduct.setName(product.getName());
+                    existingProduct.setDescription(product.getDescription());
+                    existingProduct.setPrice(product.getPrice());
+                    existingProduct.setStockQuantity(product.getStockQuantity());
+                    existingProduct.setCategory(product.getCategory());
+                    return productRepository.save(existingProduct);
                 })
                 .orElseGet(() -> {
-                    producto.setId(id);
-                    return ProductoRepository.save(producto);
+                    product.setId(id);
+                    return productRepository.save(product);
                 });
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
-    public void deleteProducto(@PathVariable Long id) {
-        ProductoRepository.deleteById(id);
+    public void deleteProduct(@PathVariable Long id) {
+        productRepository.deleteById(id);
     }
 }

@@ -1,5 +1,5 @@
 package project.logic.entity.user;
-import project.logic.entity.rol.Role;
+import project.logic.entity.role.Role;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

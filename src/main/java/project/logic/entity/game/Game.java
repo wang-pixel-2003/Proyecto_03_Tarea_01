@@ -11,12 +11,12 @@ import java.util.Date;
 public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
     private String name;
     private String description;
 
     private String status;
-    private String  imgURL;
+    private String imgURL;
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
